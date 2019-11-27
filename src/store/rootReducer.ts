@@ -1,6 +1,11 @@
 import {combineReducers} from 'redux';
-import counter from '@/features/counter/slice';
+import view from './view/slice';
+import path from './path/slice';
 
-export default combineReducers({
-  counter,
+const rootReducer = combineReducers({
+  view,
+  path,
 });
+export default rootReducer;
+
+export type RootState = ReturnType<typeof rootReducer>;
