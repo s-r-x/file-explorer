@@ -1,0 +1,29 @@
+@import '../../styles/vars';
+
+.autocomplete {
+  > div {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: -10px;
+    box-shadow: @box-shadow-base;
+    border-radius: @border-radius-base;
+  }
+}
+.row {
+  display: flex;
+  width: 100%;
+  button {
+    width: 100%;
+    font-size: @font-size-base;
+    color: @link-color;
+    text-align: left;
+    padding: 0;
+    padding-left: 7px;
+    &:hover,
+    &:focus {
+      background-color: @primary-color;
+      color: white;
+    }
+  }
+}

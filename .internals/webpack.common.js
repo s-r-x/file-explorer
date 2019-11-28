@@ -46,6 +46,7 @@ module.exports = {
       },
     ],
   },
+  target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(SRC, 'index.html'),

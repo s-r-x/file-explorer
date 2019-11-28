@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import os from 'os';
-import path from 'path';
 import {getParentDir} from '@/utils';
 
 const DOMAIN = 'path';
@@ -14,8 +13,7 @@ const counterSlice = createSlice({
   initialState,
   reducers: {
     goBack(state) {
-      const currentPath = state.history[state.current];
-      if (getParentDir(currentPath) !== currentPath) {
+      if (state.current > 0) {
         state.current -= 1;
       }
     },
