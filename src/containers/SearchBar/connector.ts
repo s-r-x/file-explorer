@@ -17,6 +17,7 @@ import {
   updateAutocomplete,
   updateFocus,
 } from '@/store/input/slice';
+import {refresh} from '@/store/tree/slice';
 
 const mSp = (state: RootState) => ({
   canGoForward: canGoForward(state),
@@ -36,6 +37,7 @@ const mDp = (dispatch: Function) => ({
   updateInput: (input: string) => dispatch(updateInput(input)),
   updateAutocomplete: (payload: []) => dispatch(updateAutocomplete(payload)),
   updateFocus: (payload: boolean) => dispatch(updateFocus(payload)),
+  refresh: () => dispatch(refresh()),
 });
 
 const connector = connect(

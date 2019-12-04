@@ -22,7 +22,7 @@ const config = {
   },
   plugins: [                                                                                                                                                           
     new webpack.WatchIgnorePlugin([
-      path.join(__dirname, '..', 'node_modules'),
+      path.resolve(__dirname, '..', 'node_modules'),
     ]),
     new webpack.HotModuleReplacementPlugin(),
     notifier,

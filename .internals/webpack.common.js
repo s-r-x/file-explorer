@@ -12,9 +12,8 @@ module.exports = {
     app: path.join(SRC, 'index.tsx'),
   },
   output: {
-    filename: isProd ? '[name].[chunkhash:8].js' : '[name].js',
+    filename: '[name].js',
     chunkFilename: isProd ? '[name].[chunkhash:8].js' : '[id].js',
-
     path: DST,
   },
   resolve: {

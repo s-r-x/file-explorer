@@ -14,10 +14,11 @@ const Example = (props: Props) => {
     props.goTo(selected);
   };
   const renderRow = (listProps: ListChildComponentProps) => {
+    const value = props.autocomplete[listProps.index];
     return (
       <div style={listProps.style} className={cls.row}>
         <button data-index={listProps.index} onClick={onSelect}>
-          {props.autocomplete[listProps.index]}
+          {value}
         </button>
       </div>
     );

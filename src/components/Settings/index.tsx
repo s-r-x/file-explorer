@@ -73,6 +73,21 @@ const Settings = (props: Props) => {
             Show as list
           </Radio>
         </Menu.Item>
+        <Menu.SubMenu title="Zoom">
+          <Menu.Item>
+            <Button onClick={props.incZoom} icon="zoom-in">
+              Zoom in
+            </Button>
+          </Menu.Item>
+          <Menu.Item>
+            <Button onClick={props.decZoom} icon="zoom-out">
+              Zoom out
+            </Button>
+          </Menu.Item>
+          <Menu.Item>
+            <Button onClick={props.resetZoom}>Actual size</Button>
+          </Menu.Item>
+        </Menu.SubMenu>
       </Menu.SubMenu>
     </Menu>
   );

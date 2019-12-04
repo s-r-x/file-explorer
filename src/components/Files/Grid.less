@@ -1,0 +1,36 @@
+.cut {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  //&:hover {
+  //  overflow: visible;
+  //}
+}
+.row {
+  display: flex;
+  justify-content: center;
+  .item {
+    text-align: center;
+    .cut;
+    padding: 10px;
+    &__size {
+      &1 {
+        font-size: 14px;
+        flex: 0 0 125px;
+      }
+      &2 {
+        font-size: 16px;
+        flex: 0 0 150px;
+      }
+      &3 {
+        font-size: 18px;
+        flex: 0 0 175px;
+      }
+    }
+  }
+  .itemPath {
+    padding-top: 10px;
+  }
+  .itemIcon {
+  }
+}

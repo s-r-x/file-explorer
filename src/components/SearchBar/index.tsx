@@ -53,7 +53,7 @@ const SearchBar = (props: Props) => {
           shape="circle"
           icon="arrow-up"
         />
-        <Button shape="circle" icon="reload" />
+        <Button shape="circle" icon="reload" onClick={props.refresh} />
         <Button
           onClick={props.goHome}
           shape="circle"

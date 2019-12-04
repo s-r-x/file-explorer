@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import os from 'os';
 import {getParentDir} from '@/utils';
 
-const DOMAIN = 'path';
+export const DOMAIN = 'path';
 
 export const initialState = {
   current: 0,

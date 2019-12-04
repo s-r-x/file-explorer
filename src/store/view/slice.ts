@@ -7,9 +7,10 @@ const counterSlice = createSlice({
   name: DOMAIN,
   initialState: {
     hidden: false,
-    mode: 'icons',
+    mode: 'list',
     sortBy: 'name',
     sortType: 'ASC',
+    zoom: 1,
   },
   reducers: {
     changeViewMode(state, action: PayloadAction<Mode>) {
@@ -24,6 +25,15 @@ const counterSlice = createSlice({
     changeSortType(state, action: PayloadAction<SortType>) {
       state.sortType = action.payload;
     },
+    decZoom(state) {
+      state.zoom = Math.max(1, state.zoom - 1);
+    },
+    incZoom(state) {
+      state.zoom = Math.min(3, state.zoom + 1);
+    },
+    resetZoom(state) {
+      state.zoom = 1;
+    },
   },
 });
 
@@ -32,6 +42,9 @@ export const {
   changeShowHidden,
   changeSortType,
   changeSortBy,
+  incZoom,
+  decZoom,
+  resetZoom,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
