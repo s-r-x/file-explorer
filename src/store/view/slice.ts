@@ -7,7 +7,7 @@ const counterSlice = createSlice({
   name: DOMAIN,
   initialState: {
     hidden: false,
-    mode: 'list',
+    mode: 'icons',
     sortBy: 'name',
     sortType: 'ASC',
     zoom: 1,

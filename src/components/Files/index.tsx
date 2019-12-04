@@ -20,6 +20,7 @@ const Files = (props: Props) => {
             )}
             {props.mode === 'icons' && (
               <Grid
+                goTo={props.goTo}
                 zoom={props.zoom}
                 list={props.list}
                 height={height}

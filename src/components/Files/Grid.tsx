@@ -32,10 +32,24 @@ const getItemSize = (zoom: number) => {
 type Props = {
   width: number;
   height: number;
-} & Pick<ParentProps, 'list' | 'zoom'>;
+} & Pick<ParentProps, 'list' | 'zoom' | 'goTo'>;
 const FilesList = memo((props: Props) => {
   const itemSize = getItemSize(props.zoom);
   const perRow = Math.floor(props.width / itemSize.width);
+  const onClick = (e: any) => {
+    const $tar = e.currentTarget;
+    const filePath = $tar.dataset.path;
+    if ($tar.dataset.dblclick) {
+      if (filePath) {
+        props.goTo(filePath);
+      }
+    } else {
+      $tar.dataset.dblclick = 1;
+      setTimeout(() => {
+        $tar.removeAttribute('data-dblclick');
+      }, 250);
+    }
+  };
   const renderRow = (listProps: ListChildComponentProps) => {
     const itemClass = `${cls.item} ${cls['item__size' + props.zoom]}`;
     const startIndex = listProps.index * perRow;
@@ -44,7 +58,11 @@ const FilesList = memo((props: Props) => {
       const value = props.list[i];
       if (value) {
         items.push(
-          <div key={i} className={itemClass}>
+          <div
+            key={i}
+            data-path={value.path}
+            onClick={onClick}
+            className={itemClass}>
             <FileIcon view="grid" zoom={props.zoom} file={value} />
             <div className={cls.itemPath}>{path.basename(value.path)}</div>
           </div>,
