@@ -13,8 +13,9 @@ const path = require('path');
         isDir: stats.isDirectory(),
         isFile: stats.isFile(),
         size: stats.size,
-        modified: stats.mtime,
-        created: stats.birthtime,
+        modified: stats.mtimeMs,
+        created: stats.birthtimeMs,
+        base: path.basename(fullPath),
       };
     }),
   );

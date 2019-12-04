@@ -1,7 +1,7 @@
 import React from 'react';
 import cls from './index.less';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import {Props} from '@/containers/Files/connector';
+import {Props} from '@/containers/Files';
 import List from './List';
 import Grid from './Grid';
 
@@ -13,6 +13,7 @@ const Files = (props: Props) => {
           <>
             {props.mode === 'list' && (
               <List
+                openFile={props.openFile}
                 zoom={props.zoom}
                 list={props.list}
                 height={height}
@@ -20,6 +21,7 @@ const Files = (props: Props) => {
             )}
             {props.mode === 'icons' && (
               <Grid
+                openFile={props.openFile}
                 goTo={props.goTo}
                 zoom={props.zoom}
                 list={props.list}

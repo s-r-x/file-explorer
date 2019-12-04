@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Mode, SortBy, SortType} from './types';
+import {Mode, SortBy, SortType, State} from './types';
 
 const DOMAIN = 'view';
 
@@ -8,10 +8,10 @@ const counterSlice = createSlice({
   initialState: {
     hidden: false,
     mode: 'icons',
-    sortBy: 'name',
-    sortType: 'ASC',
+    sortBy: 'base',
+    sortType: 'asc',
     zoom: 1,
-  },
+  } as State,
   reducers: {
     changeViewMode(state, action: PayloadAction<Mode>) {
       state.mode = action.payload;

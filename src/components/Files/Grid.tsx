@@ -1,13 +1,8 @@
 import React, {memo} from 'react';
-import {Props as ParentProps} from '@/containers/Files/connector';
+import {Props as ParentProps} from '@/containers/Files';
 import {FixedSizeList as List, ListChildComponentProps} from 'react-window';
 import cls from './Grid.less';
-import moment from 'moment';
-import path from 'path';
-import pb from 'pretty-bytes';
 import FileIcon from '@/components/FileIcon';
-
-const TIME_FORMAT = 'MM-DD-YYYY HH:mm';
 
 const getItemSize = (zoom: number) => {
   switch (zoom) {
@@ -32,15 +27,20 @@ const getItemSize = (zoom: number) => {
 type Props = {
   width: number;
   height: number;
-} & Pick<ParentProps, 'list' | 'zoom' | 'goTo'>;
+} & Pick<ParentProps, 'list' | 'zoom' | 'goTo' | 'openFile'>;
 const FilesList = memo((props: Props) => {
   const itemSize = getItemSize(props.zoom);
   const perRow = Math.floor(props.width / itemSize.width);
   const onClick = (e: any) => {
     const $tar = e.currentTarget;
     const filePath = $tar.dataset.path;
+    if (!filePath) return;
     if ($tar.dataset.dblclick) {
-      if (filePath) {
+      // TODO:: store current list as object to prevent this find weirdness?
+      const fileMeta = props.list.find(({path}) => path === filePath);
+      if (fileMeta.isFile) {
+        props.openFile(filePath);
+      } else if (fileMeta.isDir) {
         props.goTo(filePath);
       }
     } else {
@@ -64,7 +64,7 @@ const FilesList = memo((props: Props) => {
             onClick={onClick}
             className={itemClass}>
             <FileIcon view="grid" zoom={props.zoom} file={value} />
-            <div className={cls.itemPath}>{path.basename(value.path)}</div>
+            <div className={cls.itemPath}>{value.base}</div>
           </div>,
         );
       } else {

@@ -1,4 +1,11 @@
+import React from 'react';
 import Files from '@/components/Files';
-import connector from './connector';
+import connector, {Props as StoreProps} from './connector';
+import {openFile} from '@/utils/fs';
 
-export default connector(Files);
+export type Props = StoreProps & {
+  openFile(path: string): void;
+};
+const Wrap = (props: StoreProps) => <Files openFile={openFile} {...props} />;
+
+export default connector(Wrap);

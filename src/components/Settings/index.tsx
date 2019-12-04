@@ -20,8 +20,8 @@ const Settings = (props: Props) => {
           <Menu.ItemGroup title="Sort by">
             <Menu.Item>
               <Radio
-                onChange={e => e.target.checked && props.changeSortBy('name')}
-                checked={props.sortBy === 'name'}>
+                onChange={e => e.target.checked && props.changeSortBy('base')}
+                checked={props.sortBy === 'base'}>
                 Name
               </Radio>
             </Menu.Item>
@@ -35,9 +35,9 @@ const Settings = (props: Props) => {
             <Menu.Item>
               <Radio
                 onChange={e =>
-                  e.target.checked && props.changeSortBy('updated_at')
+                  e.target.checked && props.changeSortBy('created')
                 }
-                checked={props.sortBy === 'updated_at'}>
+                checked={props.sortBy === 'created'}>
                 Creation
               </Radio>
             </Menu.Item>
@@ -45,15 +45,15 @@ const Settings = (props: Props) => {
           <Menu.ItemGroup title="Sort type">
             <Menu.Item>
               <Radio
-                onChange={e => e.target.checked && props.changeSortType('ASC')}
-                checked={props.sortType === 'ASC'}>
+                onChange={e => e.target.checked && props.changeSortType('asc')}
+                checked={props.sortType === 'asc'}>
                 Ascending
               </Radio>
             </Menu.Item>
             <Menu.Item>
               <Radio
-                onChange={e => e.target.checked && props.changeSortType('DESC')}
-                checked={props.sortType === 'DESC'}>
+                onChange={e => e.target.checked && props.changeSortType('desc')}
+                checked={props.sortType === 'desc'}>
                 Descending
               </Radio>
             </Menu.Item>

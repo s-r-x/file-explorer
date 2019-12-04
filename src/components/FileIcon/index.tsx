@@ -16,7 +16,7 @@ const FileIcon = (props: Props) => {
   } else if (props.zoom === 3) {
     iconClasses += ` ${cls.xl}`;
   }
-  const icon = getIcon({isDir: props.file.isDir});
+  const icon = getIcon(props.file);
   return <img className={iconClasses} src={icon} alt={props.file.path} />;
 };
 

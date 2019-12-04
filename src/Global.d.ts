@@ -6,9 +6,10 @@ declare module '*.jpeg';
 
 declare type FileExcerpt = {
   path: string;
-  created: string;
-  modified: string;
+  created: number;
+  modified: number;
   isFile: boolean;
   isDir: boolean;
   size: number;
+  base: string;
 };
