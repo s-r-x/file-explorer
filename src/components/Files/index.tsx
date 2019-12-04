@@ -14,6 +14,7 @@ const Files = (props: Props) => {
             {props.mode === 'list' && (
               <List
                 openFile={props.openFile}
+                goTo={props.goTo}
                 zoom={props.zoom}
                 list={props.list}
                 height={height}
@@ -21,6 +22,8 @@ const Files = (props: Props) => {
             )}
             {props.mode === 'icons' && (
               <Grid
+                selected={props.selected}
+                addToSelection={props.addToSelection}
                 openFile={props.openFile}
                 goTo={props.goTo}
                 zoom={props.zoom}

@@ -27,23 +27,26 @@ const getItemSize = (zoom: number) => {
 type Props = {
   width: number;
   height: number;
-} & Pick<ParentProps, 'list' | 'zoom' | 'goTo' | 'openFile'>;
+} & Pick<
+  ParentProps,
+  'list' | 'zoom' | 'goTo' | 'openFile' | 'selected' | 'addToSelection'
+>;
 const FilesList = memo((props: Props) => {
   const itemSize = getItemSize(props.zoom);
   const perRow = Math.floor(props.width / itemSize.width);
   const onClick = (e: any) => {
     const $tar = e.currentTarget;
-    const filePath = $tar.dataset.path;
-    if (!filePath) return;
+    const index: number = $tar.dataset.index;
+    const file = props.list[index];
+    if (!file) return;
     if ($tar.dataset.dblclick) {
-      // TODO:: store current list as object to prevent this find weirdness?
-      const fileMeta = props.list.find(({path}) => path === filePath);
-      if (fileMeta.isFile) {
-        props.openFile(filePath);
-      } else if (fileMeta.isDir) {
-        props.goTo(filePath);
+      if (file.isFile) {
+        props.openFile(file.path);
+      } else if (file.isDir) {
+        props.goTo(file.path);
       }
     } else {
+      props.addToSelection(file.path);
       $tar.dataset.dblclick = 1;
       setTimeout(() => {
         $tar.removeAttribute('data-dblclick');
@@ -51,7 +54,7 @@ const FilesList = memo((props: Props) => {
     }
   };
   const renderRow = (listProps: ListChildComponentProps) => {
-    const itemClass = `${cls.item} ${cls['item__size' + props.zoom]}`;
+    const itemClass = cls.item + ' ' + cls['item__size' + props.zoom];
     const startIndex = listProps.index * perRow;
     const items = [];
     for (let i = startIndex; i < startIndex + perRow; i++) {
@@ -60,7 +63,8 @@ const FilesList = memo((props: Props) => {
         items.push(
           <div
             key={i}
-            data-path={value.path}
+            data-selected={value.path in props.selected ? 1 : 0}
+            data-index={i}
             onClick={onClick}
             className={itemClass}>
             <FileIcon view="grid" zoom={props.zoom} file={value} />

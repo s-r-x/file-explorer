@@ -1,3 +1,5 @@
+@import '../../styles/vars';
+
 .cut {
   white-space: nowrap;
   overflow: hidden;
@@ -11,6 +13,7 @@
   justify-content: center;
   .item {
     text-align: center;
+    user-select: none;
     .cut;
     padding: 10px;
     &__size {
@@ -26,6 +29,10 @@
         font-size: 18px;
         flex: 0 0 175px;
       }
+    }
+    &[data-selected='1'] {
+      background-color: @primary-color;
+      color: white;
     }
   }
   .itemPath {
