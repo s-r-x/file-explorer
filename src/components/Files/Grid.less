@@ -8,36 +8,29 @@
   //  overflow: visible;
   //}
 }
-.row {
-  display: flex;
-  justify-content: center;
-  .item {
-    text-align: center;
-    user-select: none;
-    .cut;
-    padding: 10px;
-    &__size {
-      &1 {
-        font-size: 14px;
-        flex: 0 0 125px;
-      }
-      &2 {
-        font-size: 16px;
-        flex: 0 0 150px;
-      }
-      &3 {
-        font-size: 18px;
-        flex: 0 0 175px;
-      }
+.item {
+  text-align: center;
+  user-select: none;
+  .cut;
+  padding: 10px;
+  &__size {
+    &1 {
+      font-size: 14px;
     }
-    &[data-selected='1'] {
-      background-color: @primary-color;
-      color: white;
+    &2 {
+      font-size: 16px;
+    }
+    &3 {
+      font-size: 18px;
     }
   }
-  .itemPath {
-    padding-top: 10px;
+  &[data-selected='1'] {
+    background-color: @primary-color;
+    color: white;
   }
-  .itemIcon {
-  }
+}
+.itemPath {
+  padding-top: 10px;
+}
+.itemIcon {
 }

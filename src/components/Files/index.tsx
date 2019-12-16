@@ -1,35 +1,32 @@
 import React from 'react';
 import cls from './index.less';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import {Props} from '@/containers/Files';
+import {Props} from '@/containers/Files/connector';
 import List from './List';
 import Grid from './Grid';
 
 const Files = (props: Props) => {
   return (
-    <div className={cls.wrap}>
+    <div id="files" className={cls.wrap}>
       <AutoSizer>
         {({width, height}) => (
           <>
             {props.mode === 'list' && (
               <List
-                openFile={props.openFile}
-                goTo={props.goTo}
                 zoom={props.zoom}
                 list={props.list}
                 height={height}
-                width={width}></List>
+                width={width}
+              />
             )}
             {props.mode === 'icons' && (
               <Grid
                 selected={props.selected}
-                addToSelection={props.addToSelection}
-                openFile={props.openFile}
-                goTo={props.goTo}
                 zoom={props.zoom}
                 list={props.list}
                 height={height}
-                width={width}></Grid>
+                width={width}
+              />
             )}
           </>
         )}

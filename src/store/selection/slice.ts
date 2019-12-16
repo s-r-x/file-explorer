@@ -1,4 +1,4 @@
-import {createSlice, createAction, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export const DOMAIN = 'selection';
 
@@ -15,6 +15,9 @@ const counterSlice = createSlice({
     addToSelection(state, action: PayloadAction<string>) {
       state.selected[action.payload] = 1;
     },
+    replaceSelection(state, action: PayloadAction<string>) {
+      state.selected = {[action.payload]: 1};
+    },
     removeFromSelection(state, action: PayloadAction<string>) {
       delete state.selected[action.payload];
     },
@@ -24,6 +27,7 @@ const counterSlice = createSlice({
 export const {
   clearSelection,
   addToSelection,
+  replaceSelection,
   removeFromSelection,
 } = counterSlice.actions;
 
