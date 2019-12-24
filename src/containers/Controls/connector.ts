@@ -6,6 +6,7 @@ import {
   clearSelection,
   addToSelection,
   removeFromSelection,
+  replaceSelection,
 } from '@/store/selection/slice';
 import {goTo} from '@/store/path/slice';
 
@@ -18,6 +19,7 @@ const mDp = (dispatch: Function) => ({
   clearSelection: () => dispatch(clearSelection()),
   addToSelection: (path: string) => dispatch(addToSelection(path)),
   removeFromSelection: (path: string) => dispatch(removeFromSelection(path)),
+  replaceSelection: (path: string) => dispatch(replaceSelection(path)),
 });
 
 const connector = connect(

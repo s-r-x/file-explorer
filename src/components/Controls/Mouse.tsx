@@ -25,7 +25,7 @@ class MouseControls extends PureComponent<Props, State> {
         this.props.goTo(file.path);
       }
     } else {
-      this.props.addToSelection(file.path);
+      this.props.replaceSelection(file.path);
       this.setState({dblclick: index});
       setTimeout(() => {
         this.setState({dblclick: null});
