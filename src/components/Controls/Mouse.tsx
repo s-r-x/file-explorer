@@ -35,12 +35,17 @@ class MouseControls extends PureComponent<Props, State> {
   onClick = (e: any) => {
     const {$container} = this.state;
     let $el = e.target;
+    let gotIndex = false;
     while ($el !== $container) {
       if ($el.matches('[data-fileindex]')) {
         this.onFileClick($el);
+        gotIndex = true;
         break;
       }
       $el = $el.parentNode;
+    }
+    if (!gotIndex) {
+      this.props.clearSelection();
     }
   };
   componentDidMount() {

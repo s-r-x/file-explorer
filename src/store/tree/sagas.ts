@@ -7,19 +7,12 @@ import {
   cancelled,
   call,
 } from 'redux-saga/effects';
-import {DOMAIN as PATH_DOMAIN} from '../path/slice';
 import {DOMAIN as TREE_DOMAIN, updateList} from './slice';
+import {CHANGE_PATH_ACTIONS} from '../constants';
 import {getCurrentPath} from '../path/selectors';
 import {spawnWorker} from '@/utils/workers';
 
-const WATCH_ACTIONS = [
-  `${PATH_DOMAIN}/goTo`,
-  `${PATH_DOMAIN}/goForward`,
-  `${PATH_DOMAIN}/goBack`,
-  `${PATH_DOMAIN}/goHome`,
-  `${PATH_DOMAIN}/goParent`,
-  `${TREE_DOMAIN}/refresh`,
-];
+const WATCH_ACTIONS = [...CHANGE_PATH_ACTIONS, `${TREE_DOMAIN}/refresh`];
 
 function* updateTreeSaga() {
   const currentPath = yield select(getCurrentPath);

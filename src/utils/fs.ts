@@ -2,8 +2,7 @@ import {shell} from 'electron';
 //import {exec} from 'child_process';
 
 export const openFile = (filePath: string) => {
-  const res = shell.openItem(filePath);
-  console.log(res);
+  shell.openItem(filePath);
 };
 
 //function getCommandLine() {
