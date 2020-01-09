@@ -9,3 +9,7 @@ export const readdir = async (baseDir: string) => {
   const dirs = await fs.readdir(baseDir);
   return dirs.map(dir => path.join(baseDir, dir));
 };
+
+export const getFirstObjectKey = (o: object) => {
+  for (const key in o) return key;
+};

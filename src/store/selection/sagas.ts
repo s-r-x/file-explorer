@@ -1,4 +1,4 @@
-import {take, put, select, call} from 'redux-saga/effects';
+import {take, put} from 'redux-saga/effects';
 import {CHANGE_PATH_ACTIONS} from '../constants';
 import {clearSelection} from './slice';
 

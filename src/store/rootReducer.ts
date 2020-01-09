@@ -4,13 +4,15 @@ import path from './path/slice';
 import input from './input/slice';
 import tree from './tree/slice';
 import selection from './selection/slice';
+import contextMenu from './contextMenu/slice';
 
 const rootReducer = combineReducers({
+  contextMenu,
   input,
   path,
+  selection,
   tree,
   view,
-  selection,
 });
 export default rootReducer;
 

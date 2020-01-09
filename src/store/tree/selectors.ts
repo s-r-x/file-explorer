@@ -3,7 +3,7 @@ import {createSelector} from '@reduxjs/toolkit';
 import {getShowHidden, getSortBy, getSortType} from '../view/selectors';
 import _ from 'lodash';
 
-const getRawFilesList = (state: RootState) => state.tree.list;
+export const getRawFilesList = (state: RootState) => state.tree.list;
 const getHiddenFiles = createSelector(
   [getRawFilesList, getShowHidden],
   (files, showHidden) => {
