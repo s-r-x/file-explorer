@@ -13,3 +13,5 @@ declare type FileExcerpt = {
   size: number;
   base: string;
 };
+
+declare type NumbersDict = {[key: string]: number};

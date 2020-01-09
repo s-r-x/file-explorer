@@ -5,9 +5,11 @@ import input from './input/slice';
 import tree from './tree/slice';
 import selection from './selection/slice';
 import contextMenu from './contextMenu/slice';
+import fileBuffer from './fileBuffer/slice';
 
 const rootReducer = combineReducers({
   contextMenu,
+  fileBuffer,
   input,
   path,
   selection,

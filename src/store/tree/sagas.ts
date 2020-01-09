@@ -6,6 +6,8 @@ import {
   select,
   cancelled,
   call,
+  takeEvery,
+  all,
 } from 'redux-saga/effects';
 import {DOMAIN as TREE_DOMAIN, updateList} from './slice';
 import {CHANGE_PATH_ACTIONS} from '../constants';
@@ -22,6 +24,7 @@ function* updateTreeSaga() {
     const list: FileExcerpt[] = yield call(worker.waitForMessage);
     yield put(updateList(list));
   } catch (e) {
+    // TODO
     console.error(e);
   } finally {
     if (yield cancelled()) {

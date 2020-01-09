@@ -9,6 +9,13 @@ const counterSlice = createSlice({
   name: DOMAIN,
   initialState,
   reducers: {
+    addToList(state, action: PayloadAction<FileExcerpt>) {
+      state.list.push(action.payload);
+    },
+    removeFromList(state, action: PayloadAction<string>) {
+      // TODO:: performance refactor
+      state.list = state.list.filter(({path}) => path != action.payload);
+    },
     updateList(state, action: PayloadAction<FileExcerpt[]>) {
       state.list = action.payload;
     },
@@ -16,6 +23,6 @@ const counterSlice = createSlice({
 });
 
 export const refresh = createAction(`${DOMAIN}/refresh`);
-export const {updateList} = counterSlice.actions;
+export const {updateList, addToList, removeFromList} = counterSlice.actions;
 
 export default counterSlice.reducer;

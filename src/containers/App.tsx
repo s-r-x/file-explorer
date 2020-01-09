@@ -5,6 +5,7 @@ import SearchBar from './SearchBar';
 import Files from './Files';
 import Controls from './Controls';
 import ContextMenu from './ContextMenu';
+import FSWatcher from './FSWatcher';
 
 const App = () => (
   <>
@@ -13,6 +14,7 @@ const App = () => (
     <Settings />
     <SearchBar />
     <Files />
+    <FSWatcher />
   </>
 );
 
