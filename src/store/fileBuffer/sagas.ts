@@ -1,13 +1,9 @@
-import {take, put, select, call, all, takeEvery} from 'redux-saga/effects';
-import {DOMAIN, replace as replaceBuffer, State as BufferState} from './slice';
+import {take, put, select, all, takeEvery} from 'redux-saga/effects';
+import {DOMAIN, replace as replaceBuffer} from './slice';
 import {Action, PayloadAction} from '@reduxjs/toolkit';
-import {
-  getSelectedFiles,
-  getSelectedFilesExcerpt,
-} from '@/store/selection/selectors';
-import {getFileBuffer, getFileBufferType, isFileBufferEmpty} from './selectors';
+import {getSelectedFiles} from '@/store/selection/selectors';
+import {getFileBuffer, getFileBufferType} from './selectors';
 import {copyFile, moveFile, getFileStats} from '@/utils/fs';
-import _ from 'lodash';
 import path from 'path';
 import ee from '@/utils/ee';
 
@@ -34,19 +30,18 @@ function* pasteSaga(action: PayloadAction<string>) {
   const dst = action.payload;
   const state = yield select();
   const [buffer, bufferType] = [getFileBuffer(state), getFileBufferType(state)];
-  const normalizedBuffer = _.reduce(
-    buffer,
-    (acc, __, key) => [...acc, key],
-    [],
-  );
+  const normalizedBuffer = Object.keys(buffer);
   const pasteWorker = getPasteWorker(bufferType);
   yield (async () => {
     for (const src of normalizedBuffer) {
       const realDst = path.join(dst, path.basename(src));
       try {
-        const stats = await getFileStats(realDst);
+        await getFileStats(realDst);
         // file exists
-        const shouldReplace = await ee.confirmFileReplace(realDst);
+        const shouldReplace = await ee.confirm({
+          title: 'Confirm to replace files',
+          content: `This folder already contains ${realDst}. Replace it?`,
+        });
         if (shouldReplace) {
           await pasteWorker(src, realDst, shouldReplace);
         }

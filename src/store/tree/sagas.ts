@@ -16,6 +16,7 @@ import {spawnWorker} from '@/utils/workers';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {getSelectedFiles} from '../selection/selectors';
 import {removeFile, moveToTrash} from '@/utils/fs';
+import ee from '@/utils/ee';
 
 const WATCH_ACTIONS = [...CHANGE_PATH_ACTIONS, `${TREE_DOMAIN}/refresh`];
 
@@ -53,8 +54,21 @@ function* removeFileSaga(action: PayloadAction<boolean>) {
   yield all(
     selected.map(async filePath => {
       if (permanent) {
-        // TODO
+        try {
+          await removeFile(filePath);
+        } catch (e) {
+          // TODO:: handle errors
+          if (e.code === 'EACCES') {
+            ee.notify({
+              type: 'error',
+              content: `Removing ${filePath} - permission denied`,
+            });
+          } else {
+            console.error(e);
+          }
+        }
       } else {
+        // TODO:: success or not ?
         moveToTrash(filePath);
       }
     }),
