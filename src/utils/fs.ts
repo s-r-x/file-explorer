@@ -24,3 +24,4 @@ export const getFileStats = async (filePath: string) => {
     base: path.basename(filePath),
   };
 };
+export const copyFile = (src: string, dst: string) => fs.copy(src, dst);
