@@ -27,16 +27,6 @@ const ContextMenu = (props: Props) => {
       }
     });
   };
-  const moveToTrash = () => {
-    props.selected.forEach(({path}) => {
-      props.moveToTrash(path);
-    });
-  };
-  const remove = () => {
-    props.selected.forEach(({path}) => {
-      props.removeFile(path);
-    });
-  };
   const paste = () => {
     if (canPasteIntoFolder) {
       return props.paste(props.selected[0].path);
@@ -49,8 +39,12 @@ const ContextMenu = (props: Props) => {
     <>
       <Menu id="file_context_menu">
         {hasSelected && <Item onClick={openFile}>Open</Item>}
-        {hasSelected && <Item onClick={moveToTrash}>Move To Trash</Item>}
-        {hasSelected && <Item onClick={remove}>Remove</Item>}
+        {hasSelected && (
+          <Item onClick={() => props.removeFiles(false)}>Move To Trash</Item>
+        )}
+        {hasSelected && (
+          <Item onClick={() => props.removeFiles(true)}>Remove</Item>
+        )}
         {hasSelected && <Item>Rename</Item>}
         {hasSelected && <Item onClick={props.copy}>Copy</Item>}
         {hasSelected && <Item onClick={props.cut}>Cut</Item>}

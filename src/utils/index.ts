@@ -13,3 +13,11 @@ export const readdir = async (baseDir: string) => {
 export const getFirstObjectKey = (o: object) => {
   for (const key in o) return key;
 };
+export function generateId() {
+  return (
+    '_' +
+    Math.random()
+      .toString(36)
+      .substr(2, 9)
+  );
+}

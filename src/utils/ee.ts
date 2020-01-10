@@ -1,22 +1,33 @@
 import EventEmitter from 'events';
 import {EE_REPLACE_FILE_CONFIRM, EventEmitterEvent} from '@/constants/ee';
+import {generateId} from '@/utils';
 
+export interface IConfirmable {
+  ack(): void;
+  noAck(): void;
+}
+class Confirm {
+  constructor(private ee: EventEmitter, private event: string) {}
+  ack() {
+    this.ee.emit(this.event, true);
+  }
+  noAck() {
+    this.ee.emit(this.event, false);
+  }
+}
 class Emitter extends EventEmitter {
-  private process(event: EventEmitterEvent, args: any): Promise<any> {
-    this.emit(event, args);
-    // TODO handle error, topics etc.
+  private confirm(event: EventEmitterEvent, args: any): Promise<boolean> {
+    const uniqEvent = event + generateId();
+    const confirmable = new Confirm(this, uniqEvent);
+    this.emit(event, args, confirmable);
     return new Promise(resolve => {
-      const listener = (response: any) => {
+      this.once(uniqEvent, (response: boolean) => {
         resolve(response);
-      };
-      this.once(`${event}__ack`, listener);
+      });
     });
   }
-  ack(event: EventEmitterEvent, args: any) {
-    this.emit(`${event}__ack`, args);
-  }
-  processFileReplaceConfirm(filePath: string): Promise<boolean> {
-    return this.process(EE_REPLACE_FILE_CONFIRM, filePath);
+  confirmFileReplace(filePath: string) {
+    return this.confirm(EE_REPLACE_FILE_CONFIRM, filePath);
   }
 }
 const ee = new Emitter();

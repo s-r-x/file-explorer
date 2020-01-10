@@ -23,6 +23,12 @@ const counterSlice = createSlice({
 });
 
 export const refresh = createAction(`${DOMAIN}/refresh`);
+export const removeFiles = createAction(
+  `${DOMAIN}/remove`,
+  (permanent: boolean) => ({
+    payload: permanent,
+  }),
+);
 export const {updateList, addToList, removeFromList} = counterSlice.actions;
 
 export default counterSlice.reducer;

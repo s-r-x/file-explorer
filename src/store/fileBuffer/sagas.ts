@@ -5,12 +5,22 @@ import {
   getSelectedFiles,
   getSelectedFilesExcerpt,
 } from '@/store/selection/selectors';
-import {getFileBuffer, isFileBufferEmpty} from './selectors';
-import {copyFile, getFileStats} from '@/utils/fs';
+import {getFileBuffer, getFileBufferType, isFileBufferEmpty} from './selectors';
+import {copyFile, moveFile, getFileStats} from '@/utils/fs';
 import _ from 'lodash';
 import path from 'path';
 import ee from '@/utils/ee';
 
+const getPasteWorker = (type: string) => {
+  switch (type) {
+    case 'COPY':
+      return copyFile;
+    case 'CUT':
+      return moveFile;
+    default:
+      return copyFile;
+  }
+};
 function* updateBufferSaga(action: Action) {
   const selected = yield select(getSelectedFiles);
   yield put(
@@ -23,26 +33,29 @@ function* updateBufferSaga(action: Action) {
 function* pasteSaga(action: PayloadAction<string>) {
   const dst = action.payload;
   const state = yield select();
-  const buffer = getFileBuffer(state);
+  const [buffer, bufferType] = [getFileBuffer(state), getFileBufferType(state)];
   const normalizedBuffer = _.reduce(
     buffer,
     (acc, __, key) => [...acc, key],
     [],
   );
+  const pasteWorker = getPasteWorker(bufferType);
   yield (async () => {
     for (const src of normalizedBuffer) {
       const realDst = path.join(dst, path.basename(src));
       try {
         const stats = await getFileStats(realDst);
-        const shouldReplace = await ee.processFileReplaceConfirm(realDst);
-        console.log(shouldReplace);
-        // TODO:: file exists. need confirmation
+        // file exists
+        const shouldReplace = await ee.confirmFileReplace(realDst);
+        if (shouldReplace) {
+          await pasteWorker(src, realDst, shouldReplace);
+        }
       } catch (e) {
+        // not exists
         if (e.code === 'ENOENT') {
-          console.log('good');
+          await pasteWorker(src, realDst);
         }
       }
-      //await copyFile(src, realDst);
     }
   })();
 }
