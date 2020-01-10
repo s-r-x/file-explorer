@@ -54,16 +54,24 @@ function* removeFileSaga(action: PayloadAction<boolean>) {
   yield all(
     selected.map(async filePath => {
       if (permanent) {
+        const shouldRemove = await ee.confirm({
+          title: `Are you sure that you want to
+          permanently delete ${filePath}?`,
+          content: 'If you delete a file, it is permanently lost.',
+        });
+        if (!shouldRemove) {
+          return;
+        }
         try {
           await removeFile(filePath);
         } catch (e) {
-          // TODO:: handle errors
           if (e.code === 'EACCES') {
             ee.notify({
               type: 'error',
               content: `Removing ${filePath} - permission denied`,
             });
           } else {
+            // TODO:: handle other errors
             console.error(e);
           }
         }
