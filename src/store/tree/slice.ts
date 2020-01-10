@@ -29,6 +29,7 @@ export const removeFiles = createAction(
     payload: permanent,
   }),
 );
+export const renameFile = createAction(`${DOMAIN}/rename`);
 export const {updateList, addToList, removeFromList} = counterSlice.actions;
 
 export default counterSlice.reducer;

@@ -45,7 +45,9 @@ const ContextMenu = (props: Props) => {
         {hasSelected && (
           <Item onClick={() => props.removeFiles(true)}>Remove</Item>
         )}
-        {hasSelected && <Item>Rename</Item>}
+        {props.selected.length === 1 && (
+          <Item onClick={props.renameFile}>Rename</Item>
+        )}
         {hasSelected && <Item onClick={props.copy}>Copy</Item>}
         {hasSelected && <Item onClick={props.cut}>Cut</Item>}
         {canPaste && !canPasteIntoFolder && <Item onClick={paste}>Paste</Item>}

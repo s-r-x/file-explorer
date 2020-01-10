@@ -14,9 +14,10 @@ import {CHANGE_PATH_ACTIONS} from '../constants';
 import {getCurrentPath} from '../path/selectors';
 import {spawnWorker} from '@/utils/workers';
 import {PayloadAction} from '@reduxjs/toolkit';
-import {getSelectedFiles} from '../selection/selectors';
+import {getSelectedFiles, getFirstSelectedFile} from '../selection/selectors';
 import {removeFile, moveToTrash} from '@/utils/fs';
 import ee from '@/utils/ee';
+import path from 'path';
 
 const WATCH_ACTIONS = [...CHANGE_PATH_ACTIONS, `${TREE_DOMAIN}/refresh`];
 
@@ -46,6 +47,16 @@ function* watchUpdateTreeSaga() {
     }
     task = yield fork(updateTreeSaga);
   }
+}
+function* renameSaga() {
+  const selected = yield select(getFirstSelectedFile);
+  if (!selected) return;
+  const basename = path.basename(selected);
+  const res = yield ee.pollRename(basename);
+  console.log(res);
+}
+function* watchRenameSaga() {
+  yield takeEvery(`${TREE_DOMAIN}/rename`, renameSaga);
 }
 function* removeFileSaga(action: PayloadAction<boolean>) {
   const {payload: permanent} = action;
@@ -87,5 +98,5 @@ function* watchRemoveFileSaga() {
 }
 
 export default function*() {
-  yield all([watchUpdateTreeSaga(), watchRemoveFileSaga()]);
+  yield all([watchUpdateTreeSaga(), watchRemoveFileSaga(), watchRenameSaga()]);
 }

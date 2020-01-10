@@ -3,6 +3,14 @@ import {RootState} from '@/store/rootReducer';
 import {getRawFilesList} from '@/store/tree/selectors';
 import _ from 'lodash';
 export const getSelectedFiles = (state: RootState) => state.selection.selected;
+export const getFirstSelectedFile = createSelector(
+  [getSelectedFiles],
+  selected => {
+    for (const file in selected) {
+      return file;
+    }
+  },
+);
 // TODO:: performance refactor
 export const getSelectedFilesExcerpt = createSelector(
   [getSelectedFiles, getRawFilesList],

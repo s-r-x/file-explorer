@@ -5,7 +5,7 @@ import {goTo} from '@/store/path/slice';
 import {copy, cut, paste} from '@/store/fileBuffer/slice';
 import {isFileBufferEmpty} from '@/store/fileBuffer/selectors';
 import {getCurrentPath} from '@/store/path/selectors';
-import {removeFiles} from '@/store/tree/slice';
+import {removeFiles, renameFile} from '@/store/tree/slice';
 
 const mSp = (state: RootState) => ({
   selected: getSelectedFilesExcerpt(state),
@@ -18,6 +18,7 @@ const mDp = (dispatch: Function) => ({
   cut: () => dispatch(cut()),
   paste: (dest: string) => dispatch(paste(dest)),
   removeFiles: (permanent: boolean) => dispatch(removeFiles(permanent)),
+  renameFile: () => dispatch(renameFile()),
 });
 
 const connector = connect(

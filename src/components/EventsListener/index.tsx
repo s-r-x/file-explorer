@@ -1,6 +1,7 @@
 import React from 'react';
 import Notifications from './Notifications';
 import Confirm from './Confirm';
+import Modals from './Modals';
 
 class EventsListener extends React.Component {
   render() {
@@ -8,6 +9,7 @@ class EventsListener extends React.Component {
       <>
         <Confirm />
         <Notifications />
+        <Modals />
       </>
     );
   }
