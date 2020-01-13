@@ -8,6 +8,7 @@ import {
   removeFromSelection,
   replaceSelection,
 } from '@/store/selection/slice';
+import {removeFiles} from '@/store/tree/slice';
 import {goTo} from '@/store/path/slice';
 
 const mSp = (state: RootState) => ({
@@ -20,6 +21,7 @@ const mDp = (dispatch: Function) => ({
   addToSelection: (path: string) => dispatch(addToSelection(path)),
   removeFromSelection: (path: string) => dispatch(removeFromSelection(path)),
   replaceSelection: (path: string) => dispatch(replaceSelection(path)),
+  removeFiles: (permanent: boolean) => dispatch(removeFiles(permanent)),
 });
 
 const connector = connect(

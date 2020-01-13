@@ -1,4 +1,4 @@
-import {PureComponent} from 'react';
+import {Component} from 'react';
 import {Props} from '@/containers/Controls';
 import {contextMenu} from 'react-contexify';
 
@@ -6,8 +6,8 @@ type State = {
   $container: HTMLElement | null;
   dblclick: number | null;
 };
-class MouseControls extends PureComponent<Props, State> {
-  constructor(props: any) {
+class MouseControls extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       $container: null,
