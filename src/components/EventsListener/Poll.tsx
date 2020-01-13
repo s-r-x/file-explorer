@@ -1,33 +1,39 @@
 import React from 'react';
 import {Modal, Form, Input} from 'antd';
-import ee, {IConfirmable} from '@/utils/ee';
-import {EE_POLL_RENAME} from '@/constants/ee';
+import ee, {IConfirmable, IPollPayload} from '@/utils/ee';
+import {EE_POLL} from '@/constants/ee';
 
 type State = {
-  initialValue: string;
+  okText: string;
+  label: string;
+  title: string;
   value: string;
   isOpen: boolean;
   confirmable: IConfirmable;
 };
 
-class RenameModal extends React.Component<any, State> {
+class PollListener extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
     this.state = {
-      initialValue: '',
+      okText: '',
+      title: '',
+      label: '',
       value: '',
       isOpen: false,
       confirmable: null,
     };
   }
   componentDidMount() {
-    ee.on(EE_POLL_RENAME, this.onEvent);
+    ee.on(EE_POLL, this.onEvent);
   }
-  onEvent = (value: string, confirmable: IConfirmable) => {
+  onEvent = (payload: IPollPayload, confirmable: IConfirmable) => {
     this.setState({
-      initialValue: value,
+      okText: payload.okText,
+      title: payload.title,
+      label: payload.label,
       confirmable,
-      value,
+      value: payload.input,
       isOpen: true,
     });
   };
@@ -35,6 +41,9 @@ class RenameModal extends React.Component<any, State> {
     this.setState({
       isOpen: false,
       value: '',
+      okText: '',
+      label: '',
+      title: '',
       confirmable: null,
     });
   };
@@ -57,13 +66,13 @@ class RenameModal extends React.Component<any, State> {
     const {state} = this;
     return (
       <Modal
-        title={`Rename "${state.initialValue}"`}
+        title={state.title}
         onOk={this.onOk}
-        okText="Rename"
+        okText={state.okText}
         onCancel={this.onCancel}
         visible={state.isOpen}>
         <Form layout="vertical" onSubmit={this.onSubmit}>
-          <Form.Item label="Enter the new name:">
+          <Form.Item label={state.label}>
             <Input required onChange={this.onChange} value={state.value} />
           </Form.Item>
         </Form>
@@ -71,4 +80,4 @@ class RenameModal extends React.Component<any, State> {
     );
   }
 }
-export default RenameModal;
+export default PollListener;

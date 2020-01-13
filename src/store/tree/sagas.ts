@@ -52,8 +52,13 @@ function* renameSaga() {
   const selected = yield select(getFirstSelectedFile);
   if (!selected) return;
   const parsed = path.parse(selected);
-  const newBasename = yield ee.pollRename(parsed.base);
-  if (parsed.base === newBasename) return;
+  const newBasename = yield ee.poll({
+    input: parsed.base,
+    okText: 'Rename',
+    label: 'Enter the new name:',
+    title: `Rename ${parsed.base}`,
+  });
+  if (!newBasename || parsed.base === newBasename) return;
   parsed.base = newBasename;
   const newPath = path.format(parsed);
   yield call(renameFile, selected, newPath);

@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import {EE_CONFIRM, EE_NOTIFICATION, EE_POLL_RENAME} from '@/constants/ee';
+import {EE_CONFIRM, EE_NOTIFICATION, EE_POLL} from '@/constants/ee';
 import {generateId} from '@/utils';
 
 export interface INotificationPayload {
@@ -14,6 +14,12 @@ export interface IConfirmPayload {
 export interface IConfirmable {
   ack(payload?: any): void;
   noAck(payload?: any): void;
+}
+export interface IPollPayload {
+  title: string;
+  okText: string;
+  label: string;
+  input: string;
 }
 class Confirm {
   constructor(private ee: EventEmitter, private event: string) {}
@@ -42,8 +48,8 @@ class Emitter extends EventEmitter {
     this.emit(EE_NOTIFICATION, payload);
   }
 
-  pollRename(filePath: string): Promise<any> {
-    return this.waitForResponse(EE_POLL_RENAME, filePath);
+  poll(payload: IPollPayload): Promise<any> {
+    return this.waitForResponse(EE_POLL, payload);
   }
 }
 const ee = new Emitter();
