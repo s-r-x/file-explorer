@@ -24,7 +24,7 @@ export interface IPollPayload {
 class Confirm {
   constructor(private ee: EventEmitter, private event: string) {}
   ack(payload?: any) {
-    this.ee.emit(this.event, payload || true);
+    this.ee.emit(this.event, typeof payload !== 'undefined' ? payload : true);
   }
   noAck() {
     this.ee.emit(this.event, false);

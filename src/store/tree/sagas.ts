@@ -11,11 +11,12 @@ import {
 } from 'redux-saga/effects';
 import {DOMAIN as TREE_DOMAIN, updateList} from './slice';
 import {CHANGE_PATH_ACTIONS} from '../constants';
+import {getSelectedFiles, getFirstSelectedFile} from '../selection/selectors';
 import {getCurrentPath} from '../path/selectors';
+import {replaceSelection} from '../selection/slice';
 import {spawnWorker} from '@/utils/workers';
 import {PayloadAction} from '@reduxjs/toolkit';
-import {getSelectedFiles, getFirstSelectedFile} from '../selection/selectors';
-import {removeFile, moveToTrash, renameFile} from '@/utils/fs';
+import {removeFile, moveToTrash, renameFile, createDir} from '@/utils/fs';
 import ee from '@/utils/ee';
 import path from 'path';
 
@@ -66,6 +67,25 @@ function* renameSaga() {
 function* watchRenameSaga() {
   yield takeEvery(`${TREE_DOMAIN}/rename`, renameSaga);
 }
+
+function* createFolderSaga() {
+  // TODO:: check if exists / handle errors
+  const currentPath = yield select(getCurrentPath);
+  const folderName = yield ee.poll({
+    input: '',
+    okText: 'Create',
+    label: 'Enter the folder name:',
+    title: 'Create new folder',
+  });
+  if (folderName) {
+    const realPath = path.join(currentPath, folderName);
+    yield call(createDir, realPath);
+    yield put(replaceSelection(realPath));
+  }
+}
+function* watchCreateFolderSaga() {
+  yield takeEvery(`${TREE_DOMAIN}/createFolder`, createFolderSaga);
+}
 function* removeFileSaga(action: PayloadAction<boolean>) {
   const {payload: permanent} = action;
   const selectedO = yield select(getSelectedFiles);
@@ -106,5 +126,10 @@ function* watchRemoveFileSaga() {
 }
 
 export default function*() {
-  yield all([watchUpdateTreeSaga(), watchRemoveFileSaga(), watchRenameSaga()]);
+  yield all([
+    watchUpdateTreeSaga(),
+    watchRemoveFileSaga(),
+    watchRenameSaga(),
+    watchCreateFolderSaga(),
+  ]);
 }

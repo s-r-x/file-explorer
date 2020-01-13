@@ -29,3 +29,4 @@ export const copyFile = (src: string, dst: string, overwrite = true) =>
 export const moveFile = (src: string, dst: string, overwrite = true) =>
   fs.move(src, dst, {overwrite});
 export const renameFile = (src: string, dst: string) => fs.rename(src, dst);
+export const createDir = (dir: string) => fs.ensureDir(dir);

@@ -38,7 +38,9 @@ const ContextMenu = (props: Props) => {
   return (
     <>
       <Menu id="file_context_menu">
-        {!hasSelected && <Item>Create folder</Item>}
+        {!hasSelected && (
+          <Item onClick={props.createFolder}>Create folder</Item>
+        )}
         {!hasSelected && <Item>Create file</Item>}
         {hasSelected && <Item onClick={openFile}>Open</Item>}
         {hasSelected && (

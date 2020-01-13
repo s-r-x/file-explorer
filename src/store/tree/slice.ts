@@ -30,6 +30,7 @@ export const removeFiles = createAction(
   }),
 );
 export const renameFile = createAction(`${DOMAIN}/rename`);
+export const createFolder = createAction(`${DOMAIN}/createFolder`);
 export const {updateList, addToList, removeFromList} = counterSlice.actions;
 
 export default counterSlice.reducer;
