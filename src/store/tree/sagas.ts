@@ -15,7 +15,7 @@ import {getCurrentPath} from '../path/selectors';
 import {spawnWorker} from '@/utils/workers';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {getSelectedFiles, getFirstSelectedFile} from '../selection/selectors';
-import {removeFile, moveToTrash} from '@/utils/fs';
+import {removeFile, moveToTrash, renameFile} from '@/utils/fs';
 import ee from '@/utils/ee';
 import path from 'path';
 
@@ -51,9 +51,12 @@ function* watchUpdateTreeSaga() {
 function* renameSaga() {
   const selected = yield select(getFirstSelectedFile);
   if (!selected) return;
-  const basename = path.basename(selected);
-  const res = yield ee.pollRename(basename);
-  console.log(res);
+  const parsed = path.parse(selected);
+  const newBasename = yield ee.pollRename(parsed.base);
+  if (parsed.base === newBasename) return;
+  parsed.base = newBasename;
+  const newPath = path.format(parsed);
+  yield call(renameFile, selected, newPath);
 }
 function* watchRenameSaga() {
   yield takeEvery(`${TREE_DOMAIN}/rename`, renameSaga);

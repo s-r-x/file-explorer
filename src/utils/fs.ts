@@ -28,3 +28,4 @@ export const copyFile = (src: string, dst: string, overwrite = true) =>
   fs.copy(src, dst, {overwrite});
 export const moveFile = (src: string, dst: string, overwrite = true) =>
   fs.move(src, dst, {overwrite});
+export const renameFile = (src: string, dst: string) => fs.rename(src, dst);
