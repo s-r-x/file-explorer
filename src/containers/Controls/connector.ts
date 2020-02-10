@@ -7,6 +7,10 @@ import {
   addToSelection,
   removeFromSelection,
   replaceSelection,
+  moveSelectionRight,
+  moveSelectionLeft,
+  moveSelectionTop,
+  moveSelectionBottom,
 } from '@/store/selection/slice';
 import {removeFiles} from '@/store/tree/slice';
 import {goTo} from '@/store/path/slice';
@@ -22,6 +26,10 @@ const mDp = (dispatch: Function) => ({
   removeFromSelection: (path: string) => dispatch(removeFromSelection(path)),
   replaceSelection: (path: string) => dispatch(replaceSelection(path)),
   removeFiles: (permanent: boolean) => dispatch(removeFiles(permanent)),
+  moveSelectionRight: () => dispatch(moveSelectionRight()),
+  moveSelectionLeft: () => dispatch(moveSelectionLeft()),
+  moveSelectionTop: () => dispatch(moveSelectionTop()),
+  moveSelectionBottom: () => dispatch(moveSelectionBottom()),
 });
 
 const connector = connect(

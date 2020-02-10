@@ -1,62 +1,60 @@
-import React, {memo} from 'react';
+import React, {memo, useRef, useMemo} from 'react';
 import {Props as ParentProps} from '@/containers/Files/connector';
 import {FixedSizeGrid as Grid, GridChildComponentProps} from 'react-window';
 import cls from './Grid.less';
+import {getGridItemSize} from '@/utils/view';
 import FileIcon from '@/components/FileIcon';
 
-const getItemSize = (zoom: number) => {
-  switch (zoom) {
-    case 1:
-      return {
-        width: 125,
-        height: 100,
-      };
-    case 2:
-      return {
-        width: 150,
-        height: 125,
-      };
-    case 3:
-      return {
-        width: 175,
-        height: 150,
-      };
+const Row = memo((props: GridChildComponentProps) => {
+  const index = props.rowIndex * props.data.perRow + props.columnIndex;
+  const value = props.data.files[index];
+  if (!value) {
+    return null;
   }
-};
+  const itemClass = cls.item + ' ' + cls['item__size' + props.data.zoom];
+  return (
+    <div
+      style={props.style}
+      data-selected={value && value.path in props.data.selected ? 1 : 0}
+      data-fileindex={index}
+      className={itemClass}>
+      <FileIcon view="grid" zoom={props.data.zoom} file={value} />
+      <div className={cls.itemPath}>{value.base}</div>
+    </div>
+  );
+});
+
 type Props = {
   width: number;
   height: number;
 } & Pick<ParentProps, 'list' | 'zoom' | 'selected'>;
 const FilesList = memo((props: Props) => {
-  const itemSize = getItemSize(props.zoom);
+  const ref = useRef();
+  const itemSize = getGridItemSize(props.zoom);
   const perRow = Math.floor(props.width / itemSize.width);
-  const renderRow = (gridProps: GridChildComponentProps) => {
-    const index = gridProps.rowIndex * perRow + gridProps.columnIndex;
-    const value = props.list[index];
-    if (!value) {
-      return null;
-    }
-    const itemClass = cls.item + ' ' + cls['item__size' + props.zoom];
-    return (
-      <div
-        style={gridProps.style}
-        data-selected={value && value.path in props.selected ? 1 : 0}
-        data-fileindex={index}
-        className={itemClass}>
-        <FileIcon view="grid" zoom={props.zoom} file={value} />
-        <div className={cls.itemPath}>{value.base}</div>
-      </div>
-    );
+  const rowProps = useMemo(() => {
+    return {
+      zoom: props.zoom,
+      selected: props.selected,
+      perRow,
+      files: props.list,
+    };
+  }, [props.zoom, props.selected, perRow, props.list]);
+  const onRender = ({visibleRowStartIndex, visibleRowStopIndex}: any) => {
+    console.log(visibleRowStopIndex, visibleRowStartIndex);
   };
   return (
     <Grid
+      itemData={rowProps}
+      ref={ref}
+      onItemsRendered={onRender}
       rowCount={Math.ceil(props.list.length / perRow)}
       columnCount={perRow}
       columnWidth={itemSize.width}
       rowHeight={itemSize.height}
       width={props.width}
       height={props.height}>
-      {renderRow}
+      {Row}
     </Grid>
   );
 });

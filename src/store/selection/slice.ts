@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction, createAction} from '@reduxjs/toolkit';
 
 export const DOMAIN = 'selection';
 
@@ -24,6 +24,10 @@ const counterSlice = createSlice({
   },
 });
 
+export const moveSelectionRight = createAction(`${DOMAIN}/moveRight`);
+export const moveSelectionLeft = createAction(`${DOMAIN}/moveLeft`);
+export const moveSelectionBottom = createAction(`${DOMAIN}/moveBottom`);
+export const moveSelectionTop = createAction(`${DOMAIN}/moveTop`);
 export const {
   clearSelection,
   addToSelection,
