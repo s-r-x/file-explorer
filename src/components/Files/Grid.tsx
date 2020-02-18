@@ -1,4 +1,4 @@
-import React, { memo, useRef, useMemo, useEffect } from "react";
+import React, { memo, useRef, useMemo } from "react";
 import { Props as ParentProps } from "@/containers/Files/connector";
 import { FixedSizeGrid as Grid, GridChildComponentProps } from "react-window";
 import cls from "./Grid.less";

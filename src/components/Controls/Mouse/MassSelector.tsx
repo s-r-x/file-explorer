@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import cls from "./MassSelector.less";
 import { Props as RootProps } from "@/containers/Controls";
 import { getGridItemSize, getFilesViewSize } from "@/utils/view";
+import _ from "lodash";
 
 type Props = {
   x: number;
@@ -14,37 +15,76 @@ const MassSelector = (props: Props) => {
   const height = Math.abs(props.y - props.initialY);
   const x = props.x < props.initialX ? props.x : props.initialX;
   const y = props.y < props.initialY ? props.y : props.initialY;
+  const updateSelection = useCallback(
+    _.throttle(
+      (
+        colsOffset: number,
+        colsSelected: number,
+        rowsSelected: number,
+        rowsOffset: number,
+        perRow: number
+      ) => {
+        if (colsSelected && rowsSelected) {
+          const selected = props.list
+            .filter((_, i) => {
+              const x = (i % perRow) + 1;
+              const y = Math.floor(i / perRow) + 1;
+              return (
+                x > colsOffset &&
+                x - colsOffset <= colsSelected &&
+                y > rowsOffset &&
+                y - rowsOffset <= rowsSelected
+              );
+            })
+            .reduce((acc, file) => {
+              acc[file.path] = 1;
+              return acc;
+            }, {} as { [key: string]: number });
+          props.replaceSelectionMany(selected);
+        }
+      },
+      100
+    ),
+    [props.list]
+  );
   useEffect(() => {
     const itemSize = getGridItemSize(1);
     const canvasSize = getFilesViewSize();
     const perRow = Math.floor(canvasSize / itemSize.width);
-    // TODO:: bad coords
-    const [colsOffset, colsSelected] = [
-      Math.floor(x / itemSize.width),
-      Math.ceil(width / itemSize.width)
-    ];
-    const [rowsOffset, rowsSelected] = [
-      Math.floor(y / itemSize.height),
-      Math.ceil(height / itemSize.height)
-    ];
-    if (colsSelected && rowsSelected) {
-      const selected = props.list
-        .filter((_, i) => {
-          const x = (i % perRow) + 1;
-          const y = Math.floor(i / perRow) + 1;
+    const perCol = Math.ceil(props.list.length / perRow);
+    const colsOffset = Math.floor(x / itemSize.width);
+    // TODO:: refactor
+    const getColsSelected = () => {
+      const items = Array.from(new Array(perRow - colsOffset)).filter(
+        (__, i) => {
+          const pos = colsOffset * itemSize.width + i * itemSize.width;
           return (
-            x > colsOffset &&
-            x - colsOffset <= colsSelected &&
-            y > rowsOffset &&
-            y - rowsOffset <= rowsSelected
+            _.inRange(pos, x, x + width) ||
+            _.inRange(pos + itemSize.width, x, x + width) ||
+            _.inRange(x, pos, pos + itemSize.width)
           );
-        })
-        .reduce((acc, file) => {
-          acc[file.path] = 1;
-          return acc;
-        }, {} as { [key: string]: number });
-      props.replaceSelectionMany(selected);
-    }
+        }
+      );
+      return items.length;
+    };
+
+    let colsSelected = getColsSelected();
+    const getRowsSelected = () => {
+      const items = Array.from(new Array(perRow - colsOffset)).filter(
+        (__, i) => {
+          const pos = rowsOffset * itemSize.height + i * itemSize.height;
+          return (
+            _.inRange(pos, y, y + height) ||
+            _.inRange(pos + itemSize.height, y, y + height) ||
+            _.inRange(y, pos, pos + itemSize.height)
+          );
+        }
+      );
+      return items.length;
+    };
+    const rowsOffset = Math.floor(y / itemSize.height);
+    const rowsSelected = getRowsSelected();
+    updateSelection(colsOffset, colsSelected, rowsSelected, rowsOffset, perRow);
   }, [width, height, x, y, props.list]);
   return (
     <div
