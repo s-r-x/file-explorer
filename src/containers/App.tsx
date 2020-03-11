@@ -7,6 +7,7 @@ import Controls from './Controls';
 import ContextMenu from './ContextMenu';
 import FSWatcher from './FSWatcher';
 import EventsListener from '@/components/EventsListener';
+import BottomStats from './BottomStats';
 
 const App = () => (
   <>
@@ -15,6 +16,7 @@ const App = () => (
     <Settings />
     <SearchBar />
     <Files />
+    <BottomStats/>
     <FSWatcher />
     <EventsListener />
   </>

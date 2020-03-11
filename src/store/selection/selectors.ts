@@ -12,6 +12,7 @@ export const getFirstSelectedFile = createSelector(
   },
 );
 // TODO:: performance refactor
+// TODO:: hidden files
 export const getSelectedFilesExcerpt = createSelector(
   [getSelectedFiles, getRawFilesList],
   (selected, files) => {

@@ -4,7 +4,7 @@ import {getShowHidden, getSortBy, getSortType} from '../view/selectors';
 import _ from 'lodash';
 
 export const getRawFilesList = (state: RootState) => state.tree.list;
-const getHiddenFiles = createSelector(
+export const getFilesWithHiddenOnes = createSelector(
   [getRawFilesList, getShowHidden],
   (files, showHidden) => {
     if (showHidden) return files;
@@ -12,7 +12,7 @@ const getHiddenFiles = createSelector(
   },
 );
 export const getFilesList = createSelector(
-  [getHiddenFiles, getSortBy, getSortType],
+  [getFilesWithHiddenOnes, getSortBy, getSortType],
   (files, sortBy, sortType) => {
     return _.orderBy(files, sortBy, sortType);
   },

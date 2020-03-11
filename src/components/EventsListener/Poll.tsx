@@ -1,7 +1,7 @@
-import React from 'react';
-import {Modal, Form, Input} from 'antd';
-import ee, {IConfirmable, IPollPayload} from '@/utils/ee';
-import {EE_POLL} from '@/constants/ee';
+import React from "react";
+import { Modal, Form, Input } from "antd";
+import ee, { IConfirmable, IPollPayload } from "@/utils/ee";
+import { EE_POLL } from "@/constants/ee";
 
 type State = {
   okText: string;
@@ -16,35 +16,41 @@ class PollListener extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
     this.state = {
-      okText: '',
-      title: '',
-      label: '',
-      value: '',
+      okText: "",
+      title: "",
+      label: "",
+      value: "",
       isOpen: false,
-      confirmable: null,
+      confirmable: null
     };
   }
   componentDidMount() {
     ee.on(EE_POLL, this.onEvent);
   }
+  textInput: any = null;
   onEvent = (payload: IPollPayload, confirmable: IConfirmable) => {
-    this.setState({
-      okText: payload.okText,
-      title: payload.title,
-      label: payload.label,
-      confirmable,
-      value: payload.input,
-      isOpen: true,
-    });
+    this.setState(
+      {
+        okText: payload.okText,
+        title: payload.title,
+        label: payload.label,
+        confirmable,
+        value: payload.input,
+        isOpen: true
+      },
+      () => {
+        this.textInput.focus();
+      }
+    );
   };
   resetState = () => {
     this.setState({
       isOpen: false,
-      value: '',
-      okText: '',
-      label: '',
-      title: '',
-      confirmable: null,
+      value: "",
+      okText: "",
+      label: "",
+      title: "",
+      confirmable: null
     });
   };
   onCancel = () => {
@@ -56,24 +62,31 @@ class PollListener extends React.Component<any, State> {
     this.resetState();
   };
   onChange = (e: any) => {
-    this.setState({value: e.target.value});
+    this.setState({ value: e.target.value });
   };
   onSubmit = (e: any) => {
     e.preventDefault();
     this.onOk();
   };
   render() {
-    const {state} = this;
+    const { state } = this;
     return (
       <Modal
+        forceRender
         title={state.title}
         onOk={this.onOk}
         okText={state.okText}
         onCancel={this.onCancel}
-        visible={state.isOpen}>
+        visible={state.isOpen}
+      >
         <Form layout="vertical" onSubmit={this.onSubmit}>
           <Form.Item label={state.label}>
-            <Input required onChange={this.onChange} value={state.value} />
+            <Input
+              ref={input => (this.textInput = input)}
+              required
+              onChange={this.onChange}
+              value={state.value}
+            />
           </Form.Item>
         </Form>
       </Modal>

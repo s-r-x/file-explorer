@@ -120,7 +120,9 @@ class MouseControls extends Component<Props, State> {
     if (type === "file") {
       const file = this.props.list[$el.dataset.fileindex];
       if (!file) return;
-      this.props.replaceSelection(file.path);
+      if (!(file.path in this.props.selected)) {
+        this.props.replaceSelection(file.path);
+      }
       contextMenu.show({
         id: "file_context_menu",
         event

@@ -5,15 +5,16 @@ import _ from 'lodash';
 
 const ContextMenu = (props: Props) => {
   const hasSelected = !_.isEmpty(props.selected);
+  const selectedMoreThan1 = props.selected.length > 1;
   const canPaste = useMemo(() => {
     if (props.isBufferEmpty) {
       return false;
     }
-    if (props.selected.length > 1) {
+    if (selectedMoreThan1) {
       return false;
     }
     return true;
-  }, [props.selected, props.isBufferEmpty]);
+  }, [selectedMoreThan1, props.isBufferEmpty]);
   const canPasteIntoFolder = useMemo(() => {
     return canPaste && hasSelected && props.selected[0].isDir;
   }, [canPaste, props.selected, hasSelected]);
