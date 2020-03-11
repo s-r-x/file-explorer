@@ -9,7 +9,7 @@ type Props = {
   y: number;
   initialX: number;
   initialY: number;
-} & Pick<RootProps, "replaceSelectionMany" | "list">;
+} & Pick<RootProps, "replaceSelectionMany" | "list" | "clearSelection">;
 const MassSelector = (props: Props) => {
   const width = Math.abs(props.x - props.initialX);
   const height = Math.abs(props.y - props.initialY);
@@ -41,19 +41,25 @@ const MassSelector = (props: Props) => {
               return acc;
             }, {} as { [key: string]: number });
           props.replaceSelectionMany(selected);
+        } else {
+          props.clearSelection();
         }
       },
-      100
+      125
     ),
     [props.list]
   );
   useEffect(() => {
+    // TODO:: pass actual zoom
     const itemSize = getGridItemSize(1);
     const canvasSize = getFilesViewSize();
     const perRow = Math.floor(canvasSize / itemSize.width);
-    const perCol = Math.ceil(props.list.length / perRow);
+    const rowsCount = Math.ceil(props.list.length / perRow);
+    //const perCol = Math.ceil(props.list.length / perRow);
     const colsOffset = Math.floor(x / itemSize.width);
-    // TODO:: refactor
+    const rowsOffset = Math.floor(y / itemSize.height);
+    // TODO:: maybe we can cache items positions right after mousedown event
+    // TODO:: correct pos calculations when the files container's height is less than the parent height
     const getColsSelected = () => {
       const items = Array.from(new Array(perRow - colsOffset)).filter(
         (__, i) => {
@@ -68,21 +74,18 @@ const MassSelector = (props: Props) => {
       return items.length;
     };
 
-    let colsSelected = getColsSelected();
+    const colsSelected = getColsSelected();
     const getRowsSelected = () => {
-      const items = Array.from(new Array(perRow - colsOffset)).filter(
-        (__, i) => {
-          const pos = rowsOffset * itemSize.height + i * itemSize.height;
-          return (
-            _.inRange(pos, y, y + height) ||
-            _.inRange(pos + itemSize.height, y, y + height) ||
-            _.inRange(y, pos, pos + itemSize.height)
-          );
-        }
-      );
-      return items.length;
+      const intersected = Array.from(new Array(rowsCount)).filter((__, i) => {
+        const pos = i * itemSize.height;
+        return (
+          _.inRange(pos, y, y + height) ||
+          _.inRange(pos + itemSize.height, y, y + height) ||
+          _.inRange(y, pos, pos + itemSize.height)
+        );
+      });
+      return intersected.length;
     };
-    const rowsOffset = Math.floor(y / itemSize.height);
     const rowsSelected = getRowsSelected();
     updateSelection(colsOffset, colsSelected, rowsSelected, rowsOffset, perRow);
   }, [width, height, x, y, props.list]);

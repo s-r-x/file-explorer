@@ -12,6 +12,7 @@ type Point = {
 };
 type State = {
   $container: HTMLElement | null;
+  $scrollArea: HTMLElement | null;
   dblclick: number | null;
   multiselect: boolean;
   multiselectInitialCoords: Point | null;
@@ -22,6 +23,7 @@ class MouseControls extends Component<Props, State> {
     super(props);
     this.state = {
       $container: null,
+      $scrollArea: null,
       dblclick: null,
       multiselect: false,
       multiselectCoords: null,
@@ -66,11 +68,13 @@ class MouseControls extends Component<Props, State> {
     if (!this.state.multiselect) {
       return;
     } else {
+      const { $container } = this.state;
       const { left, top } = this.state.$container.getBoundingClientRect();
+      const scrollY = $container.scrollTop;
       this.setState({
         multiselectCoords: {
           x: event.clientX - left,
-          y: event.clientY - top,
+          y: event.clientY - top + scrollY
         }
       });
     }
@@ -81,12 +85,14 @@ class MouseControls extends Component<Props, State> {
     }
     const { type } = this.getElemMeta(event);
     if (type === undefined) {
-      const { left, top } = this.state.$container.getBoundingClientRect();
+      const { $container } = this.state;
+      const { left, top } = $container.getBoundingClientRect();
+      const scrollY = $container.scrollTop;
       this.setState({
         multiselect: true,
         multiselectInitialCoords: {
           x: event.clientX - left,
-          y: event.clientY - top,
+          y: event.clientY - top + scrollY
         }
       });
     }
@@ -95,15 +101,11 @@ class MouseControls extends Component<Props, State> {
     if (event.which !== 1) {
       return;
     }
-    const { type } = this.getElemMeta(event);
-    if (type === undefined) {
-      this.setState({
-        multiselect: false,
-        multiselectInitialCoords: null,
-        multiselectCoords: null
-      });
-      // TODO
-    }
+    this.setState({
+      multiselect: false,
+      multiselectInitialCoords: null,
+      multiselectCoords: null
+    });
   };
   onClick = (event: any) => {
     const { type, $el } = this.getElemMeta(event);
@@ -132,14 +134,23 @@ class MouseControls extends Component<Props, State> {
     }
   };
   componentDidMount() {
-    ee.on("mass_selector/container_created", ($container: HTMLElement) => {
-      this.setState({ $container });
-      $container.addEventListener("mousedown", this.onMouseDown);
-      $container.addEventListener("mouseup", this.onMouseUp);
-      $container.addEventListener("mousemove", this.onMouseMove);
-      $container.addEventListener("click", this.onClick);
-      $container.addEventListener("contextmenu", this.onRightClick);
-    });
+    ee.on(
+      "mass_selector/container_created",
+      ({
+        $container,
+        $scrollArea
+      }: {
+        $container: HTMLElement;
+        $scrollArea: HTMLElement;
+      }) => {
+        this.setState({ $container, $scrollArea });
+        $container.addEventListener("mousedown", this.onMouseDown);
+        $container.addEventListener("mouseup", this.onMouseUp);
+        $container.addEventListener("mousemove", this.onMouseMove);
+        $container.addEventListener("click", this.onClick);
+        $container.addEventListener("contextmenu", this.onRightClick);
+      }
+    );
   }
   componentWillUnmount() {
     this.state.$container.removeEventListener("mousedown", this.onMouseDown);
@@ -153,19 +164,28 @@ class MouseControls extends Component<Props, State> {
       multiselectInitialCoords: initialCoords,
       multiselectCoords: coords,
       multiselect,
-      $container
+      $container,
+      $scrollArea
     } = this.state;
-    if (!multiselect || !initialCoords || !coords || !$container) return null;
+    if (
+      !multiselect ||
+      !initialCoords ||
+      !coords ||
+      !$container ||
+      !$scrollArea
+    )
+      return null;
     return createPortal(
       <MassSelector
         list={this.props.list}
         replaceSelectionMany={this.props.replaceSelectionMany}
+        clearSelection={this.props.clearSelection}
         x={coords.x}
         y={coords.y}
         initialX={initialCoords.x}
         initialY={initialCoords.y}
       />,
-      $container
+      $scrollArea
     );
   }
 }
