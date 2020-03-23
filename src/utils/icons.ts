@@ -53,6 +53,7 @@ const isImg = (ext: string) => {
     case ".png":
     case ".jpg":
     case ".jpeg":
+    case ".gif":
       return true;
     default:
       return false;
