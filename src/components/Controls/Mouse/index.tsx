@@ -101,15 +101,16 @@ class MouseControls extends Component<Props, State> {
     if (event.which !== 1) {
       return;
     }
-    this.setState({
-      multiselect: false,
-      multiselectInitialCoords: null,
-      multiselectCoords: null
-    });
-  };
-  onClick = (event: any) => {
+    const { multiselect } = this.state;
+    if (multiselect) {
+      this.setState({
+        multiselect: false,
+        multiselectInitialCoords: null,
+        multiselectCoords: null
+      });
+    }
     const { type, $el } = this.getElemMeta(event);
-    if (type === "file") {
+    if (type === "file" && !multiselect) {
       this.onFileClick($el);
     } else if (!type) {
       this.props.clearSelection();
@@ -149,7 +150,6 @@ class MouseControls extends Component<Props, State> {
         $container.addEventListener("mousedown", this.onMouseDown);
         $container.addEventListener("mouseup", this.onMouseUp);
         $container.addEventListener("mousemove", this.onMouseMove);
-        $container.addEventListener("click", this.onClick);
         $container.addEventListener("contextmenu", this.onRightClick);
       }
     );
@@ -158,7 +158,6 @@ class MouseControls extends Component<Props, State> {
     this.state.$container.removeEventListener("mousedown", this.onMouseDown);
     this.state.$container.removeEventListener("mouseup", this.onMouseUp);
     this.state.$container.removeEventListener("mousemove", this.onMouseMove);
-    this.state.$container.removeEventListener("click", this.onClick);
     this.state.$container.removeEventListener("contextmenu", this.onRightClick);
   }
   render() {

@@ -24,7 +24,6 @@ const config = {
     new webpack.WatchIgnorePlugin([
       path.resolve(__dirname, '..', 'node_modules'),
     ]),
-    new webpack.HotModuleReplacementPlugin(),
     notifier,
     new ProgressBarPlugin()
   ],
