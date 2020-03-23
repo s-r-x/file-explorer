@@ -1,12 +1,12 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import os from 'os';
-import {getParentDir} from '@/utils';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getParentDir } from "@/utils";
+import { getUserFolder } from "@/utils/fs";
 
-export const DOMAIN = 'path';
+export const DOMAIN = "path";
 
 export const initialState = {
   current: 0,
-  history: ['/'],
+  history: [getUserFolder("home")]
 };
 const counterSlice = createSlice({
   name: DOMAIN,
@@ -23,13 +23,13 @@ const counterSlice = createSlice({
       }
     },
     goHome(state) {
-      const {current, history} = state;
+      const { current, history } = state;
       history.splice(current + 1);
-      history.push(os.homedir());
+      history.push(getUserFolder("home"));
       state.current = history.length - 1;
     },
     goParent(state) {
-      const {current, history} = state;
+      const { current, history } = state;
       const parent = getParentDir(history[current]);
       if (parent !== history[current]) {
         history.splice(current + 1);
@@ -38,15 +38,21 @@ const counterSlice = createSlice({
       }
     },
     goTo(state, action: PayloadAction<string>) {
-      const {history} = state;
+      const { history } = state;
       if (history[state.current] !== action.payload) {
         history.push(action.payload);
         state.current = history.length - 1;
       }
-    },
-  },
+    }
+  }
 });
 
-export const {goBack, goForward, goHome, goParent, goTo} = counterSlice.actions;
+export const {
+  goBack,
+  goForward,
+  goHome,
+  goParent,
+  goTo
+} = counterSlice.actions;
 
 export default counterSlice.reducer;
