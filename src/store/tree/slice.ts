@@ -14,7 +14,7 @@ const counterSlice = createSlice({
     },
     removeFromList(state, action: PayloadAction<string>) {
       const idx = state.list.findIndex(({ path }) => path === action.payload);
-      if (idx) {
+      if (idx !== -1) {
         state.list.splice(idx, 1);
       }
     },
