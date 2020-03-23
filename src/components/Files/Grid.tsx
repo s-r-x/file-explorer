@@ -43,11 +43,13 @@ const FilesList = memo((props: Props) => {
   const itemSize = getGridItemSize(props.zoom);
   const perRow = Math.floor(props.width / itemSize.width);
   const onItemsRendered = () => {
-    // @ts-ignore
-    const $container = ref.current._outerRef;
-    // @ts-ignore
-    const $scrollArea = $container.firstChild;
-    ee.emit("mass_selector/container_created", { $scrollArea, $container });
+    if (ref.current) {
+      // @ts-ignore
+      const $container = ref.current._outerRef;
+      // @ts-ignore
+      const $scrollArea = $container.firstChild;
+      ee.emit("mass_selector/container_created", { $scrollArea, $container });
+    }
   };
   const rowProps = useMemo(() => {
     return {

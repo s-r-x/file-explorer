@@ -1,9 +1,9 @@
-import {createSlice, createAction, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, createAction, PayloadAction } from "@reduxjs/toolkit";
 
-export const DOMAIN = 'tree';
+export const DOMAIN = "tree";
 
 export const initialState = {
-  list: [] as FileExcerpt[],
+  list: [] as FileExcerpt[]
 };
 const counterSlice = createSlice({
   name: DOMAIN,
@@ -13,24 +13,26 @@ const counterSlice = createSlice({
       state.list.push(action.payload);
     },
     removeFromList(state, action: PayloadAction<string>) {
-      // TODO:: performance refactor
-      state.list = state.list.filter(({path}) => path != action.payload);
+      const idx = state.list.findIndex(({ path }) => path === action.payload);
+      if (idx) {
+        state.list.splice(idx, 1);
+      }
     },
     updateList(state, action: PayloadAction<FileExcerpt[]>) {
       state.list = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const refresh = createAction(`${DOMAIN}/refresh`);
 export const removeFiles = createAction(
   `${DOMAIN}/remove`,
   (permanent: boolean) => ({
-    payload: permanent,
-  }),
+    payload: permanent
+  })
 );
 export const renameFile = createAction(`${DOMAIN}/rename`);
 export const createFolder = createAction(`${DOMAIN}/createFolder`);
-export const {updateList, addToList, removeFromList} = counterSlice.actions;
+export const { updateList, addToList, removeFromList } = counterSlice.actions;
 
 export default counterSlice.reducer;

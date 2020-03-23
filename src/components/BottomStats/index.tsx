@@ -14,6 +14,7 @@ const WithSelection = (props: Pick<Props, "files" | "selected">) => {
       props.selected,
       (acc, __, key) => {
         const file = props.files.find(file => file.path === key);
+        if (!file) return acc;
         return file.size + acc;
       },
       0

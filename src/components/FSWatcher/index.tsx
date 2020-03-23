@@ -22,6 +22,9 @@ class FSWatcher extends React.Component<Props, State> {
     this.props.addToList(excerpt);
   }
   removeListener(path: string) {
+    if(path in this.props.selected) {
+      this.props.removeFromSelection(path);
+    }
     this.props.removeFromList(path);
   }
   async initWatcher() {
