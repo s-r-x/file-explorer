@@ -1,18 +1,14 @@
-@import '../../styles/vars';
+@import "../../styles/vars";
 
 .cut {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  //&:hover {
-  //  overflow: visible;
-  //}
 }
 .item {
   text-align: center;
   user-select: none;
-  .cut;
-  padding: 10px;
+  margin: 10px;
   &__size {
     &1 {
       font-size: 14px;
@@ -24,13 +20,12 @@
       font-size: 18px;
     }
   }
-  &[data-selected='1'] {
+  &[data-selected="1"] {
     background-color: @primary-color;
     color: white;
   }
 }
 .itemPath {
+  .cut;
   padding-top: 10px;
-}
-.itemIcon {
 }

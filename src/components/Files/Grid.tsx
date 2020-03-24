@@ -8,24 +8,26 @@ import ee from "@/utils/ee";
 
 const GridItem = memo((props: GridChildComponentProps) => {
   const index = props.rowIndex * props.data.perRow + props.columnIndex;
-  const value = props.data.files[index];
+  const value: FileExcerpt = props.data.files[index];
   if (!value) {
     return null;
   }
   const itemClass = cls.item + " " + cls["item__size" + props.data.zoom];
   return (
-    <div
-      onDragStart={props.data.onDragStart}
-      draggable
-      onDragOver={value.isDir ? props.data.onDragOver : null}
-      onDrop={value.isDir ? props.data.onDrop : null}
-      style={props.style}
-      data-selected={value && value.path in props.data.selected ? 1 : 0}
-      data-fileindex={index}
-      className={itemClass}
-    >
-      <FileIcon view="grid" zoom={props.data.zoom} file={value} />
-      <div className={cls.itemPath}>{value.base}</div>
+    <div style={props.style}>
+      <div
+        title={value.base}
+        onDragStart={props.data.onDragStart}
+        draggable
+        onDragOver={value.isDir ? props.data.onDragOver : null}
+        onDrop={value.isDir ? props.data.onDrop : null}
+        className={itemClass}
+        data-selected={value && value.path in props.data.selected ? 1 : 0}
+        data-fileindex={index}
+      >
+        <FileIcon view="grid" zoom={props.data.zoom} file={value} />
+        <div className={cls.itemPath}>{value.base}</div>
+      </div>
     </div>
   );
 });

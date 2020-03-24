@@ -8,6 +8,7 @@
     "start": "NODE_ENV=development webpack-dev-server --mode=development --client-log-level warning --config .internals/webpack.dev.js",
     "start:prod": "NODE_ENV=production webpack --mode=production --config .internals/webpack.prod.js && electron --noDevServer .",
     "test": "jest",
+    "test-watch": "jest --watch",
     "package:linux": "electron-builder -l",
     "package:win": "electron-builder -w",
     "postinstall": "electron-builder install-app-deps"
@@ -77,6 +78,7 @@
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "progress-bar-webpack-plugin": "^1.12.1",
+    "redux-saga-test-plan": "^4.0.0-rc.3",
     "style-loader": "^1.0.0",
     "terser-webpack-plugin": "^2.2.1",
     "ts-jest": "^24.2.0",

@@ -60,6 +60,7 @@ const MassSelector = (props: Props) => {
     const rowsOffset = Math.floor(y / itemSize.height);
     // TODO:: maybe we can cache items positions right after mousedown event
     // TODO:: correct pos calculations when the files container's height is less than the parent height
+    // TODO:: margin between items!
     const getColsSelected = () => {
       const items = Array.from(new Array(perRow - colsOffset)).filter(
         (__, i) => {
